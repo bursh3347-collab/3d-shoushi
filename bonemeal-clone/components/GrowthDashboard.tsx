@@ -1,43 +1,45 @@
+import type { CSSProperties } from "react";
 import { actionQueue, aiVisibility, surfaceSignals } from "../lib/mock-data";
 
-const panelStyle: React.CSSProperties = {
+const panelStyle: CSSProperties = {
   padding: 20,
 };
 
-const splitGridStyle: React.CSSProperties = {
+const splitGridStyle: CSSProperties = {
   display: "grid",
   gridTemplateColumns: "1.15fr 0.85fr",
   gap: 14,
 };
 
-const stackStyle: React.CSSProperties = {
+const stackStyle: CSSProperties = {
   display: "grid",
   gap: 14,
 };
 
-const queueItemStyle: React.CSSProperties = {
+const queueItemStyle: CSSProperties = {
   border: "1px solid var(--line)",
   borderRadius: 18,
   padding: 14,
   background: "rgba(255,255,255,.04)",
 };
 
-const rowBetweenStyle: React.CSSProperties = {
+const rowBetweenStyle: CSSProperties = {
   display: "flex",
   justifyContent: "space-between",
   gap: 12,
   alignItems: "center",
 };
 
-const pillStyle: React.CSSProperties = {
+const pillStyle: CSSProperties = {
   border: "1px solid var(--line)",
   borderRadius: 999,
   padding: "4px 9px",
   color: "var(--green)",
   fontSize: 12,
+  whiteSpace: "nowrap",
 };
 
-const metaStyle: React.CSSProperties = {
+const metaStyle: CSSProperties = {
   display: "flex",
   flexWrap: "wrap",
   gap: 10,
@@ -45,12 +47,33 @@ const metaStyle: React.CSSProperties = {
   fontSize: 12,
 };
 
-const progressTrackStyle: React.CSSProperties = {
+const progressTrackStyle: CSSProperties = {
   flex: 1,
   height: 8,
   borderRadius: 999,
   overflow: "hidden",
   background: "rgba(255,255,255,.1)",
+};
+
+const mutedParagraphStyle: CSSProperties = {
+  color: "var(--muted)",
+  lineHeight: 1.55,
+};
+
+const visibilityRowStyle: CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  gap: 10,
+};
+
+const engineLabelStyle: CSSProperties = {
+  minWidth: 84,
+  color: "var(--muted)",
+};
+
+const signalTitleStyle: CSSProperties = {
+  color: "var(--muted)",
+  marginTop: 4,
 };
 
 function statusLabel(status: string) {
@@ -67,7 +90,7 @@ export function GrowthDashboard() {
   return (
     <div style={splitGridStyle}>
       <div className="card" style={panelStyle}>
-        <h3 style= marginTop: 0 >Action queue</h3>
+        <h3>Action queue</h3>
         <div style={stackStyle}>
           {actionQueue.map((action) => (
             <div key={action.id} style={queueItemStyle}>
@@ -75,7 +98,7 @@ export function GrowthDashboard() {
                 <strong>{action.title}</strong>
                 <span style={pillStyle}>{statusLabel(action.status)}</span>
               </div>
-              <p style= color: "var(--muted)", lineHeight: 1.6 >{action.reason}</p>
+              <p style={mutedParagraphStyle}>{action.reason}</p>
               <div style={metaStyle}>
                 <span>surface: {action.surface}</span>
                 <span>impact: {action.impact}</span>
@@ -88,13 +111,20 @@ export function GrowthDashboard() {
 
       <div style={stackStyle}>
         <div className="card" style={panelStyle}>
-          <h3 style= marginTop: 0 >AI search visibility</h3>
+          <h3>AI search visibility</h3>
           <div style={stackStyle}>
             {aiVisibility.map((row) => (
-              <div key={row.engine} style= ...rowBetweenStyle, gap: 10 >
-                <span style= minWidth: 80 >{row.engine}</span>
+              <div key={row.engine} style={visibilityRowStyle}>
+                <span style={engineLabelStyle}>{row.engine}</span>
                 <span style={progressTrackStyle}>
-                  <span style={{ display: "block", width: `${row.visibility}%`, height: "100%", background: "linear-gradient(90deg, var(--green), var(--blue))" }} />
+                  <span
+                    style={{
+                      display: "block",
+                      width: `${row.visibility}%`,
+                      height: "100%",
+                      background: "linear-gradient(90deg, var(--green), var(--blue))",
+                    }}
+                  />
                 </span>
                 <strong>{row.visibility}%</strong>
               </div>
@@ -103,13 +133,13 @@ export function GrowthDashboard() {
         </div>
 
         <div className="card" style={panelStyle}>
-          <h3 style= marginTop: 0 >Live surface signals</h3>
+          <h3>Live surface signals</h3>
           <div style={stackStyle}>
             {surfaceSignals.map((signal) => (
               <div key={signal.title} style={rowBetweenStyle}>
                 <div>
                   <strong>{signal.source}</strong>
-                  <div style= color: "var(--muted)", marginTop: 4 >{signal.title}</div>
+                  <div style={signalTitleStyle}>{signal.title}</div>
                 </div>
                 <span style={pillStyle}>{signal.score}</span>
               </div>
